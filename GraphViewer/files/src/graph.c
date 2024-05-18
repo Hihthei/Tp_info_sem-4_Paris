@@ -4,10 +4,6 @@
 #include <stdio.h>
 #include <string.h>
 
-
-
-
-
 Graph* createGraph(typed(json_array)* nodesIdArray, const typed(json_element) jsonContent, const char* fileName)
 {
 	Graph* graph = (Graph*)malloc(sizeof(Graph));

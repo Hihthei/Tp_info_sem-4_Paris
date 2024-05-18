@@ -30,6 +30,15 @@
     <ClCompile Include="files\src\display.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="files\src\Graph1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="files\src\ListInt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="files\src\ShortestPath.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="json\json.h">
@@ -42,6 +51,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="files\include\display.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="files\include\Graph1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="files\include\ShortestPath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="files\include\Settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="files\include\ListInt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
