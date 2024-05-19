@@ -1,15 +1,15 @@
 #include "graph.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
 Graph* createGraph(typed(json_array)* nodesIdArray, const typed(json_element) jsonContent, const char* fileName)
 {
-	Graph* graph = (Graph*)malloc(sizeof(Graph));
+	Graph* graph = (Graph*)calloc(1, sizeof(Graph));
+	AssertNew(graph);
+
 	graph->nodesCount = (int)nodesIdArray->count;
 
-	NodesList* nodesList = (NodesList*)malloc(sizeof(NodesList));
+	NodesList* nodesList = (NodesList*)calloc(1, sizeof(NodesList));
+	AssertNew(nodesList);
+
 	graph->nodes = nodesList;
 
 	//For the number of nodescount, we create a node and add it to the list
@@ -17,31 +17,41 @@ Graph* createGraph(typed(json_array)* nodesIdArray, const typed(json_element) js
 	// each node has an empty adjacent list
 	for (int i = 0; i < graph->nodesCount; i++)
 	{
-		Node* nodeCurrent = (Node*)malloc(sizeof(Node));
+		Node* nodeCurrent = (Node*)calloc(1, sizeof(Node));
+		AssertNew(nodeCurrent);
+
 		typed(json_element) nodeId = nodesIdArray->elements[i];
 		int nameLength = strlen(nodeId.value.as_string);
-		nodeCurrent->id = (char*)malloc(nameLength);
+
+		nodeCurrent->id = (char*)calloc(nameLength, sizeof(char));
+		AssertNew(nodeCurrent->id);
+
 		strcpy(nodeCurrent->id, nodeId.value.as_string);
+
 		nodeCurrent->data = i * 10;
 		nodeCurrent->x = -1;
 		nodeCurrent->y = -1;
 
 		nodeCurrent->adjacent = NULL;
 		nodesList->node = nodeCurrent;
-		nodesList->next = (NodesList*)malloc(sizeof(NodesList));
+
+		nodesList->next = (NodesList*)calloc(1, sizeof(NodesList));
+		AssertNew(nodesList->next);
+
 		nodesList = nodesList->next;
 		nodesList->node = NULL;
 		nodesList->next = NULL;
 	}
 
-	graph->fileName = (char*)malloc(strlen(fileName));
+	graph->fileName = (char*)calloc(strlen(fileName), sizeof(char));
+	AssertNew(graph->fileName);
+
 	typed(json_element) bOriented = getJsonElementFromName(jsonContent, "oriented");
 	graph->oriented = bOriented.value.as_number.value.as_long;
 	strcpy(graph->fileName, fileName);
 
 	return graph;
 }
-
 
 Graph* jsonCreateGraphFromFile(const char* jsonFile)
 {
@@ -83,30 +93,38 @@ Graph* jsonCreateGraphFromFile(const char* jsonFile)
 			typed(json_element) connectedNodeIds = getJsonElementFromName(nodeAsObject, "adjencyList");
 
 			typed(json_array)* values = connectedNodeIds.value.as_array;
-			char** adjencents = malloc(sizeof(char*) * values->count);
-			long* adjencentsWeight = malloc(sizeof(long) * values->count);
+			char** adjencents = (char**)calloc(values->count, sizeof(char*));
+			AssertNew(adjencents);
+
+			long* adjencentsWeight = (long*)calloc(values->count, sizeof(long));
+			AssertNew(adjencentsWeight);
+
 			//For each element of the adjency list, get the id of the connected node and the weight of the edge
 			for (int j = 0; j < values->count; j++) {
 				typed(json_element) element = values->elements[j];
 				typed(json_array)* edgeInfos = element.value.as_array;
+
 				if (edgeInfos != NULL)
 				{
 					if (edgeInfos->elements[0].value.as_number.value.as_long != -1) {
-						adjencents[j] = (char*)malloc(strlen(edgeInfos->elements[0].value.as_string));
+						adjencents[j] = (char*)calloc(strlen(edgeInfos->elements[0].value.as_string), sizeof(char));
+						AssertNew(adjencents[j]);
+
 						strcpy(adjencents[j], edgeInfos->elements[0].value.as_string);
 						adjencentsWeight[j] = edgeInfos->elements[1].value.as_number.value.as_long;
 					}
 				}
 			}
 
-			NodesList* adjencyList = (NodesList*)malloc(sizeof(NodesList));
+			NodesList* adjencyList = (NodesList*)calloc(1, sizeof(NodesList));
+			AssertNew(adjencyList);
+
 			curNode->adjacent = adjencyList;
 			adjencyList->node = NULL;
 			adjencyList->next = NULL;
 			createAdjacentList(graph, adjencyList, adjencents, adjencentsWeight, (int)values->count);
 		}
 		curNodeList = curNodeList->next;
-
 	}
 
 	//json_print(&element, 2);
@@ -129,7 +147,9 @@ void createAdjacentList(Graph* graph,
 		//and set this new element as the next of current adjacent element
 		if (adjencyList->node != NULL)
 		{
-			adjencyList->next = (NodesList*)malloc(sizeof(NodesList));
+			adjencyList->next = (NodesList*)calloc(1, sizeof(NodesList));
+			AssertNew(adjencyList->next);
+
 			adjencyList = adjencyList->next;
 			adjencyList->weight = 1;
 			adjencyList->node = NULL;
@@ -148,6 +168,10 @@ void createAdjacentList(Graph* graph,
 			tmp = tmp->next;
 		}
 	}
+}
+
+void graph_destroy() {
+
 }
 
 void saveGraph(Graph* graph)
@@ -194,4 +218,12 @@ void saveGraph(Graph* graph)
 	}
 	fprintf(file, "}");
 	fclose(file);
+}
+
+NodesList* Graph_getArcList(Graph* graph, int nodeIndex) {
+	NodesList* current = graph->nodes;
+	for (int i = 0; i < nodeIndex && current != NULL; i++) {
+		current = current->next;
+	}
+	return current ? current->node->adjacent : NULL;
 }
