@@ -5,8 +5,13 @@
 #include "display.h"
 
 int main() {
-	
 	Graph* graph = jsonCreateGraphFromFile("./resources/graph.json");
+
+
+
 	displayGraphWindow(graph);
+
+
+
 	return 0;
 }
