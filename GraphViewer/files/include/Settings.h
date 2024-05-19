@@ -10,6 +10,9 @@
     #include <stdint.h>
     #include <time.h>
 
+    #include "../../Raylib/src/raylib.h"
+
+
     #define AssertNew(ptr) { if (ptr == NULL) { assert(false); abort(); } }
 
     #ifdef _MSC_VER

@@ -2,8 +2,8 @@
 #define SHORTESTPATH_H
 
     #include "Settings.h"
-    #include "Graph1.h"
-    #include "ListInt.h"
+    #include "graph.h"
+    #include "ListSTR.h"
 
     /// @brief Structure représentant un chemin dans un graphe.
     typedef struct Path
@@ -11,7 +11,7 @@
         /// @brief Liste des sommets du chemin.
         /// Le premier élément de la liste est le sommet et départ
         /// et le dernier élément le sommet d'arrivée.
-        ListInt *list;
+        ListStr *list;
 
         /// @brief Longueur du chemin.
         /// Autrement dit la somme des poids des arcs qui composent le chemin.
@@ -21,7 +21,7 @@
     /// @brief Crée un nouveau chemin.
     /// @param start le sommet de départ du chemin.
     /// @return Le chemin créé.
-    Path *Path_create(int start);
+    Path* Path_create(const char* startId);
 
     /// @brief Détruit un chemin créé avec Path_create().
     /// @param path le chemin à détruire.
@@ -40,7 +40,7 @@
     /// @param start l'identifiant du sommet de départ.
     /// @param end l'identifiant du sommet d'arrivée.
     /// @return Un plus court chemin en cas d'existance, NULL sinon.
-    Path *Graph_shortestPath(Graph *graph, int start, int end);
+    Path* Graph_shortestPath(Graph* graph, const char* startId, const char* endId);
 
     /// @brief Effectue l'algorithme de Dijkstra.
     /// Si end >= 0, cette fonction calcule un plus court chemin entre les noeuds
@@ -60,7 +60,7 @@
     /// @param distances tableau péalablement alloué dont la taille est égale au
     ///     nombre de noeuds du graphe. Après l'appel à la fonction, il contient
     ///     pour chaque noeud sa distance avec le noeud start.
-    void Graph_dijkstra(Graph *graph, int start, int end, int *predecessors, float *distances);
+    void Graph_dijkstra(Graph* graph, int start, int end, int* predecessors, float* distances);
 
     /// @brief Reconstruit un chemin à partir de la sortie de l'algorithme de
     /// Dijkstra.
@@ -69,6 +69,6 @@
     /// @param distances tableau des distances.
     /// @param end noeud d'arrivée.
     /// @return Le plus court chemin arrivant au noeud end s'il existe, NULL sinon.
-    Path *Graph_dijkstraGetPath(int *predecessors, float *distances, int end);
+    Path* Graph_dijkstraGetPath(Graph* graph, int* predecessors, float* distances, int end);
 
 #endif

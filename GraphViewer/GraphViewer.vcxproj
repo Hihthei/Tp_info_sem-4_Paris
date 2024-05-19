@@ -84,8 +84,7 @@
   <ItemGroup>
     <ClCompile Include="files\src\display.c" />
     <ClCompile Include="files\src\graph.c" />
-    <ClCompile Include="files\src\Graph1.c" />
-    <ClCompile Include="files\src\ListInt.c" />
+    <ClCompile Include="files\src\ListSTR.c" />
     <ClCompile Include="files\src\ShortestPath.c" />
     <ClCompile Include="json\json.c" />
     <ClCompile Include="json\readJson.c" />
@@ -94,8 +93,7 @@
   <ItemGroup>
     <ClInclude Include="files\include\display.h" />
     <ClInclude Include="files\include\graph.h" />
-    <ClInclude Include="files\include\Graph1.h" />
-    <ClInclude Include="files\include\ListInt.h" />
+    <ClInclude Include="files\include\ListSTR.h" />
     <ClInclude Include="files\include\Settings.h" />
     <ClInclude Include="files\include\ShortestPath.h" />
     <ClInclude Include="json\json.h" />
