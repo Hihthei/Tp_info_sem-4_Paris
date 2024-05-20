@@ -45,7 +45,7 @@ Path* Graph_shortestPath(Graph* graph, const char* startId, const char* endId) {
 
     Graph_dijkstra(graph, start, end, predecessors, distances);
 
-    Path* path = Graph_dijkstraGetPath((Graph*)graph, predecessors, distances, end);
+    Path* path = Graph_dijkstraGetPath(graph, predecessors, distances, end);
 
     free(predecessors);
     predecessors = NULL;
@@ -85,12 +85,17 @@ void Graph_dijkstra(Graph* graph, int start, int end, int* predecessors, float* 
             break;
         }
 
+        printf("Exploring node %d with current distance %f\n", currID, currDist);
         explored[currID] = true;
 
         NodesList* arc = Graph_getArcList(graph, currID);
         while (arc != NULL) {
+            printf("Exploring arc to node %s (weight: %d)\n", arc->node->id, arc->weight);
             int nextID = Graph_getNodeIndex(graph, arc->node->id);
-            if (nextID == -1) continue; // Invalid node, skip
+            if (nextID == -1) {
+                printf("Invalid node %s\n", arc->node->id);
+                continue; // Invalid node, skip
+            }
 
             float dist = distances[currID] + arc->weight;
             if (distances[nextID] > dist) {

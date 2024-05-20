@@ -222,8 +222,19 @@ void saveGraph(Graph* graph)
 
 NodesList* Graph_getArcList(Graph* graph, int nodeIndex) {
 	NodesList* current = graph->nodes;
-	for (int i = 0; i < nodeIndex && current != NULL; i++) {
+	int i = 0;
+	while (current != NULL && current->node != NULL) {
+		if (i == nodeIndex) {
+			printf("Exploring arcs for node %s\n", current->node->id);
+			NodesList* arc = current->node->adjacent;
+			while (arc != NULL) {
+				printf(" -> %s (weight: %d)\n", arc->node->id, arc->weight);
+				arc = arc->next;
+			}
+			return current->node->adjacent;
+		}
 		current = current->next;
+		i++;
 	}
-	return current ? current->node->adjacent : NULL;
+	return NULL;
 }
